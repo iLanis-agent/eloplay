@@ -31,12 +31,12 @@
   <div class="card tabs"><button id="t1" class="on">Match odds</button><button id="t2">Tournament</button></div>
   <div class="card" id="p1">
     <div class="grid"><div><label>Your rating</label><input id="ra" value="1613" inputmode="numeric"></div><div><label>Opponent rating</label><input id="rb" value="1750" inputmode="numeric"></div><div><label>K-factor</label><select id="k1"><option>10</option><option>16</option><option selected>20</option><option>32</option><option>40</option></select></div></div>
-    <div id="o1"></div>
+    <div id="res1"></div>
   </div>
   <div class="card" id="p2" style="display:none">
     <div class="grid"><div><label>Your rating</label><input id="tr" value="1613" inputmode="numeric"></div><div><label>K-factor</label><select id="k2"><option>10</option><option>16</option><option>20</option><option selected>32</option><option>40</option></select></div></div>
     <div id="rows"></div><button class="btn" id="ex">Load Wikipedia example</button><button class="btn" id="clr">Clear rounds</button>
-    <div id="o2"></div>
+    <div id="res2"></div>
   </div>
   <div class="note">Expected score = 1 / (1 + 10^((opponent - you) / 400)); new rating = rating + K x (actual - expected). Expected score counts a draw as half a point, so it is not the same as the chance of winning outright. Federations use their own K-factors and rules for new players, so this is the textbook formula, not an official rating. Runs in your browser, nothing stored.</div>
 </div>
@@ -50,10 +50,10 @@
   for (var i = 0; i < N; i++) { var d = document.createElement('div'); d.className = 'row'; d.innerHTML = '<span class="muted">' + (i + 1) + '</span><input id="o' + i + '" placeholder="Opponent rating" inputmode="numeric"><select id="s' + i + '"><option value="1">Win</option><option value="0.5">Draw</option><option value="0">Loss</option></select>'; box.appendChild(d); }
   function m1() {
     var ra = parseFloat($('ra').value), rb = parseFloat($('rb').value), k = +$('k1').value;
-    if (!isFinite(ra) || !isFinite(rb)) { $('o1').innerHTML = '<div class="err">Enter both ratings.</div>'; return; }
+    if (!isFinite(ra) || !isFinite(rb)) { $('res1').innerHTML = '<div class="err">Enter both ratings.</div>'; return; }
     var e = E.expected(ra, rb), o = E.odds(e);
     var w = k * (1 - e), dr = k * (0.5 - e), l = k * (0 - e);
-    $('o1').innerHTML = '<div class="big" style="margin-top:14px">' + f(e * 100, 1) + '% <small>expected score</small></div><div class="bar"><i style="width:' + (e * 100) + '%"></i></div>' +
+    $('res1').innerHTML = '<div class="big" style="margin-top:14px">' + f(e * 100, 1) + '% <small>expected score</small></div><div class="bar"><i style="width:' + (e * 100) + '%"></i></div>' +
       '<div class="stats"><div><span class="muted">Odds</span><b>' + (o >= 1 ? f(o, 2) + ' : 1 for you' : '1 : ' + f(1 / o, 2) + ' against') + '</b></div><div><span class="muted">Rating gap</span><b>' + sg(ra - rb, 0) + '</b></div></div>' +
       '<table><tr><th>Result</th><th>Rating change</th><th>New rating</th></tr><tr><td>Win</td><td>' + sg(w, 1) + '</td><td>' + f(ra + w, 1) + '</td></tr><tr><td>Draw</td><td>' + sg(dr, 1) + '</td><td>' + f(ra + dr, 1) + '</td></tr><tr><td>Loss</td><td>' + sg(l, 1) + '</td><td>' + f(ra + l, 1) + '</td></tr></table>' +
       '<div class="note">A 400 point edge is 10 : 1 on expected score. Each 100 points of gap is worth about 64% vs 36%.</div>';
@@ -62,9 +62,9 @@
     var g = [];
     for (var i = 0; i < N; i++) { var v = $('o' + i).value.trim(); if (v !== '') g.push({ opp: parseFloat(v), score: +$('s' + i).value }); }
     var u = g.length ? E.update(parseFloat($('tr').value), +$('k2').value, g) : null;
-    if (!u) { $('o2').innerHTML = '<div class="muted" style="margin-top:12px">Add your rating and at least one opponent rating.</div>'; return; }
+    if (!u) { $('res2').innerHTML = '<div class="muted" style="margin-top:12px">Add your rating and at least one opponent rating.</div>'; return; }
     var dl = u.actual - u.expected;
-    $('o2').innerHTML = '<div class="big" style="margin-top:14px">' + f(u.rating, 0) + ' <small>' + sg(u.change, 1) + ' (unrounded ' + f(u.rating, 2) + ')</small></div>' +
+    $('res2').innerHTML = '<div class="big" style="margin-top:14px">' + f(u.rating, 0) + ' <small>' + sg(u.change, 1) + ' (unrounded ' + f(u.rating, 2) + ')</small></div>' +
       '<div class="stats"><div><span class="muted">Actual score</span><b>' + f(u.actual, 1) + ' / ' + u.games + '</b></div><div><span class="muted">Expected score</span><b>' + f(u.expected, 2) + '</b></div><div><span class="muted">Versus expectation</span><b>' + sg(dl, 2) + '</b></div></div>' +
       '<table><tr><th>Opp</th><th>Expected</th><th>Result</th></tr>' + u.rows.map(function (r) { return '<tr><td>' + r.opp + '</td><td>' + f(r.e, 2) + '</td><td>' + (r.score === 1 ? 'Win' : r.score === 0.5 ? 'Draw' : 'Loss') + '</td></tr>'; }).join('') + '</table>' +
       (dl < 0 && u.actual >= u.games / 2 ? '<div class="note">You scored at least half the points but lost rating: your opponents were rated lower than you on average.</div>' : '');
