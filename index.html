@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EloPlay - what is your rating worth?</title>
+<meta name="description" content="Elo win odds from two ratings, and what a tournament does to your rating. Runs in your browser.">
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; background:#1b1a2e; color:#ecebf7; line-height:1.6; }
+  .wrap { max-width:680px; margin:0 auto; padding:48px 20px 60px; }
+  .logo { font-size:46px; font-weight:800; } .logo span { color:#6ee7c8; }
+  .tag { font-size:19px; margin-top:10px; color:#d5d3ee; }
+  .cta { display:inline-block; margin-top:26px; background:#6ee7c8; color:#1b1a2e; font-weight:700; padding:14px 30px; border-radius:12px; text-decoration:none; }
+  h2 { font-size:21px; margin:40px 0 10px; } li { color:#aeacd0; margin-bottom:8px; } ul { margin-left:20px; }
+  .demo { margin-top:26px; background:#27264a; border-radius:14px; padding:18px; } .demo b { font-size:26px; color:#6ee7c8; }
+  footer { margin-top:50px; font-size:13px; color:#8583ad; } a { color:#6ee7c8; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="logo">Elo<span>Play</span></div>
+  <div class="tag">Two wins, two losses and a draw can still cost you rating points. Here is why.</div>
+  <a class="cta" href="app.html">Open the app</a>
+  <div class="demo">A 1613 player who scores 2.5 out of 5 against 1609, 1477, 1388, 1586 and 1720 expected 2.87 points. At K = 32 that is <b>1601</b>, a drop of 11.7.</div>
+  <h2>What it does</h2>
+  <ul><li>Expected score and odds from any two ratings</li><li>What a win, draw or loss is worth at your K-factor</li><li>Tournament rating update, round by round, with expected score per opponent</li><li>Works for chess, Go, table tennis, esports or any Elo-style ladder</li></ul>
+  <footer>Formulas and the worked example from Wikipedia, Elo rating system. Textbook formula, not an official federation rating. Static, client-side, nothing stored. <a href="https://github.com/iLanis-agent/eloplay">Source</a></footer>
+</div>
+</body>
+</html>
